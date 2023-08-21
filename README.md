@@ -2,9 +2,9 @@
 Pong in SDL2 with a variety of cheats
 
 # DEPENDECIES
--gcc
--make
--SDL2
+<br>-gcc
+<br>-make
+<br>-SDL2
 
 # Installation
 <br> You will need to be in a Linux operating system
