@@ -2,6 +2,8 @@
 Pong in SDL2 with a variety of cheats
 
 # DEPENDECIES
+-gcc
+-make
 -SDL2
 
 # Installation
