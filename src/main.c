@@ -129,7 +129,7 @@ int main(int argc, char *argv[])
       float elapsedTime = diff / 1000.0f;
       update(elapsedTime);
 
-      // Calculaes FPS
+      // Resets lastTick to currentTicks
       lastTick = currentTicks;
 
 
