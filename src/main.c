@@ -62,8 +62,10 @@ void updateScore(int player, int points);
 int main(int argc, char *argv[])
 {
    srand((unsigned int)time(NULL));
-   
+
+   // Checks for arguments passed
    for(int i = 1; i < argc; i++){
+      // Enables a faster game
       if(strcmp("speed", argv[1]) == 0){
          BALL_SPEED = 300;
          PLAYER_MOVE_SPEED = 300;
@@ -71,6 +73,7 @@ int main(int argc, char *argv[])
          break;
       }
 
+      // Increases the size of the ball
       if(strcmp("baller", argv[1]) == 0){
          BALL_SIZE = 64;
          printf("Thats a really big ball\n");
@@ -78,6 +81,7 @@ int main(int argc, char *argv[])
       }
    }
 
+   // initializes initialize and if its unable to it'll exit
    if(!initialize()){
       exit(1);
    }
@@ -119,17 +123,20 @@ int main(int argc, char *argv[])
          }
       }/** EVENTS **/
 
+      // Calculates FPS
       Uint32 currentTicks = SDL_GetTicks();
       Uint32 diff = currentTicks - lastTick;
       float elapsedTime = diff / 1000.0f;
       update(elapsedTime);
-      
+
+      // Calculaes FPS
       lastTick = currentTicks;
 
 
 
    }/** Main Game Loop **/
 
+   // cleans resources and shuts down SDL2
    shutdown();
 
    return 0;
@@ -139,7 +146,7 @@ int main(int argc, char *argv[])
 bool initialize(void)
 {
    
-   
+   // Initializes SDL2 VIDEO subsystem
    if(SDL_Init(SDL_INIT_VIDEO) < 0){
       fprintf(
          stderr,"FAILED TO INITIALIZE SDL_SUBSYSTEM.ERROR: %s\n",
@@ -147,6 +154,7 @@ bool initialize(void)
       return false;
    }
 
+   // Creates Window and Renderer
    SDL_CreateWindowAndRenderer(WIDTH, HEIGHT, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC, &window, &renderer);
 
    if(!window){
@@ -159,8 +167,10 @@ bool initialize(void)
       return false;
    }
 
+   // Give the Window a title
    SDL_SetWindowTitle(window, "Pong | Press Spacebar to serve");
 
+   // Makes the ball and players
    ball = makeBall(BALL_SIZE);
    player = makePlayers();
    player2 = makePlayers();
@@ -168,6 +178,7 @@ bool initialize(void)
    return true;
 }
 
+// call this function upon every update
 void update(float elapsedTime)
 {
    // Renders onto the back buffer
@@ -185,6 +196,7 @@ void update(float elapsedTime)
 }
 
 // Static to prevent confusion between POSIX shutdown
+// cleans SDL2 related memory and shutsdown SDL2
 static void shutdown(void)
 {
    // If not NULL then cleanup
@@ -209,6 +221,7 @@ Player makePlayers(void)
    return player;
 }
 
+// Run in each frame
 void updatePlayers(float elapsedTime)
 {
    // Keyboard
@@ -280,6 +293,7 @@ void updatePlayers(float elapsedTime)
    }
 }
 
+// Renders every player on the screen
 void renderPlayers(void)
 {
    // Render player 1 (left, green)
@@ -324,6 +338,7 @@ Ball makeBall(int size)
    return ball;
 }
 
+// Updates ball every frame
 void updateBall(Ball *ball, float elapsedTime)
 {
    if(!served){
@@ -355,6 +370,7 @@ void updateBall(Ball *ball, float elapsedTime)
    }
 }
 
+// renders ball
 void renderBall(void)
 {
    int size = ball.size;
@@ -370,9 +386,10 @@ void renderBall(void)
    SDL_RenderFillRect(renderer, &rect);
 }
 
-// Score
+// Updates the score
 void updateScore(int thePlayer, int points)
 {
+   // if a score happens set serving to false and update the score depending on thePlayer
    served = false;
    if(thePlayer == 1){
       player.score += points;
@@ -382,6 +399,7 @@ void updateScore(int thePlayer, int points)
       player2.score += points;
    }
 
+   // Safely format a string to the appropiate size and set the title to the new buffer string
    char *fmt = "Player: %d | Player2: %d";
    int len = snprintf(NULL, 0, fmt, player.score, player2.score);
    char buffer[len + 1];
